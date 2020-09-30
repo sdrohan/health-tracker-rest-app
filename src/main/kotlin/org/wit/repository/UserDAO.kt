@@ -23,5 +23,20 @@ class UserDAO {
         users.add(userDTO)
     }
 
+    fun findByEmail(email: String) :UserDTO?{
+        return users.find { it.email == email }
+    }
+
+    fun delete(id: Int) {
+        var user = findById(id)
+        users.remove(user)
+    }
+
+    fun update(id: Int, userDTO: UserDTO){
+        var user = findById(id)
+        user?.email = userDTO.email
+        user?.name = userDTO.name
+        user?.id = userDTO.id
+    }
 
 }
