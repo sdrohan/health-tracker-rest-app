@@ -26,12 +26,12 @@ class UserDAO {
         }
     }
 
-    fun save(userDTO: UserDTO){
-        transaction {
+    fun save(userDTO: UserDTO) : Int?{
+        return transaction {
             Users.insert {
                 it[name] = userDTO.name
                 it[email] = userDTO.email
-            }
+            } get Users.id
         }
     }
 
@@ -44,8 +44,8 @@ class UserDAO {
         }
     }
 
-    fun update(id: Int, userDTO: UserDTO){
-        transaction {
+    fun update(id: Int, userDTO: UserDTO): Int{
+        return transaction {
             Users.update ({
                 Users.id eq id}) {
                 it[name] = userDTO.name
