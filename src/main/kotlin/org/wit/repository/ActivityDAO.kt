@@ -38,8 +38,8 @@ class ActivityDAO {
     }
 
     //Save an activity to the database
-    fun save(activityDTO: ActivityDTO){
-        transaction {
+    fun save(activityDTO: ActivityDTO) : Int?{
+        return transaction {
             Activities.insert {
                 it[description] = activityDTO.description
                 it[duration] = activityDTO.duration
@@ -47,11 +47,11 @@ class ActivityDAO {
                 it[calories] = activityDTO.calories
                 it[userId] = activityDTO.userId
             }
-        }
+        } get Activities.id
     }
 
-    fun updateByActivityId(activityId: Int, activityDTO: ActivityDTO){
-        transaction {
+    fun updateByActivityId(activityId: Int, activityDTO: ActivityDTO): Int{
+        return transaction {
             Activities.update ({
                 Activities.id eq activityId}) {
                 it[description] = activityDTO.description

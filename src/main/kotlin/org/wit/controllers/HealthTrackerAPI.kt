@@ -90,8 +90,16 @@ object HealthTrackerAPI {
     fun getActivitiesByUserId(ctx: Context) {
         if (userDao.findById(ctx.pathParam("user-id").toInt()) != null) {
             val activities = activityDAO.findByUserId(ctx.pathParam("user-id").toInt())
-            if (activities.size > 0)
+            if (activities.size > 0) {
                 ctx.json(activities)
+                ctx.status(200)
+            }
+            else{
+                ctx.status(404)
+            }
+        }
+        else{
+            ctx.status(404)
         }
     }
 
@@ -99,27 +107,50 @@ object HealthTrackerAPI {
         val activity = activityDAO.findByActivityId((ctx.pathParam("activity-id").toInt()))
         if (activity != null){
             ctx.json(activity)
+            ctx.status(200)
+        }
+        else{
+            ctx.status(404)
         }
     }
 
     fun addActivity(ctx: Context) {
-        val activity : ActivityDTO = jsonToObject(ctx.body())
-        activityDAO.save(activity)
-        ctx.json(activity)
+        val activityDTO : ActivityDTO = jsonToObject(ctx.body())
+        val userId = userDao.findById(activityDTO.userId)
+        if (userId != null) {
+            val activityId = activityDAO.save(activityDTO)
+            if (activityId != null) {
+                activityDTO.id = activityId
+                ctx.json(activityDTO)
+                ctx.status(201)
+            }
+        }
+        else{
+            ctx.status(404)
+        }
     }
 
     fun deleteActivityByActivityId(ctx: Context){
-        activityDAO.deleteByActivityId(ctx.pathParam("activity-id").toInt())
+        if (activityDAO.deleteByActivityId(ctx.pathParam("activity-id").toInt()) != 0)
+            ctx.status(204)
+        else
+            ctx.status(404)
     }
 
     fun deleteActivityByUserId(ctx: Context){
-        activityDAO.deleteByUserId(ctx.pathParam("user-id").toInt())
+        if (activityDAO.deleteByUserId(ctx.pathParam("user-id").toInt()) != 0)
+            ctx.status(204)
+        else
+            ctx.status(404)
     }
 
     fun updateActivity(ctx: Context){
         val activity : ActivityDTO = jsonToObject(ctx.body())
-        activityDAO.updateByActivityId(
-            activityId = ctx.pathParam("activity-id").toInt(),
-            activityDTO=activity)
+        if (activityDAO.updateByActivityId(
+                activityId = ctx.pathParam("activity-id").toInt(),
+                activityDTO=activity) != 0)
+            ctx.status(204)
+        else
+            ctx.status(404)
     }
 }

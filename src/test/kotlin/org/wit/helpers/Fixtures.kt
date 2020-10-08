@@ -14,6 +14,12 @@ val validEmail = "testuser1@test.com"
 val updatedName = "Updated Name"
 val updatedEmail = "Updated Email"
 
+val validStarted  =  DateTime.parse("2020-06-10T05:59:27.258+01:00")
+val updatedDescription = "Updated Description"
+val updatedDuration = 30.0
+val updatedCalories = 945
+val updatedStarted = DateTime.parse("2020-06-11T05:59:27.258Z")
+
 val users = arrayListOf<UserDTO>(
     UserDTO(name = "Alice Wonderland", email = "alice@wonderland.com", id = 1),
     UserDTO(name = "Bob Cat", email = "bob@cat.ie", id = 2),
