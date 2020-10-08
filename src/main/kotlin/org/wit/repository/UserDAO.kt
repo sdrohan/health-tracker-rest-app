@@ -1,7 +1,6 @@
 package org.wit.repository
 
-import org.jetbrains.exposed.sql.select
-import org.jetbrains.exposed.sql.selectAll
+import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.wit.db.Users
 import org.wit.domain.UserDTO
@@ -28,19 +27,37 @@ class UserDAO {
     }
 
     fun save(userDTO: UserDTO){
-
+        transaction {
+            Users.insert {
+                it[name] = userDTO.name
+                it[email] = userDTO.email
+            }
+        }
     }
 
     fun findByEmail(email: String) :UserDTO?{
-       return null
-    }
-
-    fun delete(id: Int) {
-
+        return transaction {
+            Users.select() {
+                Users.email eq email}
+                .map{mapToUserDTO(it)}
+                .firstOrNull()
+        }
     }
 
     fun update(id: Int, userDTO: UserDTO){
+        transaction {
+            Users.update ({
+                Users.id eq id}) {
+                it[name] = userDTO.name
+                it[email] = userDTO.email
+            }
+        }
+    }
 
+    fun delete (id: Int): Int{
+        return transaction{
+            Users.deleteWhere { Users.id eq id }
+        }
     }
 
 }
