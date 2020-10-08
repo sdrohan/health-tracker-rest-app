@@ -17,6 +17,7 @@ The following files have been resolved:
    org.slf4j:slf4j-api:jar:1.8.0-beta4:compile
    joda-time:joda-time:jar:2.9.9:compile
    javax.servlet:javax.servlet-api:jar:3.1.0:compile
+   com.fasterxml.jackson.datatype:jackson-datatype-joda:jar:2.8.7:compile
    org.postgresql:postgresql:jar:42.2.2:compile
    org.eclipse.jetty:jetty-server:jar:9.4.25.v20191220:compile
    org.eclipse.jetty:jetty-client:jar:9.4.25.v20191220:compile
