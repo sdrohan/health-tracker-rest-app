@@ -201,10 +201,12 @@ class ActivityDAOTest {
                 //Arrange - create and populate tables with three users and three activities
                 val userDAO = populateUserTable()
                 val activityDAO = populateActivityTable()
-
-                //Act & Assert
                 assertEquals(3, activityDAO.getAll().size)
+
+                //Act
                 activityDAO.deleteByUserId(3)
+
+                //Assert
                 assertEquals(3, activityDAO.getAll().size)
             }
         }
