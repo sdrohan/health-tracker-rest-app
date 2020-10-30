@@ -1,0 +1,53 @@
+# If the tests are successful, the project is deployed to Heroku.
+
+name: Deploy to Heroku
+ 
+on: [push, pull_request]
+ 
+jobs:
+  
+  package:
+    name: Maven Package (no tests) 
+    runs-on: ubuntu-latest
+   
+    steps:
+      - uses: actions/checkout@v2
+      - name: Setup JDK 11
+        uses: actions/setup-java@v1
+        with:
+          java-version: 11
+      - name: Maven Package
+        run: mvn -B clean package -DskipTests
+
+  test:
+    name: Maven Tests
+    needs: package
+    runs-on: ubuntu-latest
+     
+    steps:
+      - uses: actions/checkout@v2
+      - name: Setup JDK 11
+        uses: actions/setup-java@v1
+        with:
+          java-version: 11
+      - name: Maven Verify
+        run: mvn -B clean verify
+  
+  deploy:
+   name: Deploying to Heroku
+   needs: test
+   runs-on: ubuntu-latest
+   
+   steps:
+    - uses: actions/checkout@v2
+    - uses: AkhileshNS/heroku-deploy@v3.5.7
+      name: Deploy to Heroku
+      with:
+        # This will be used for authentication. You can find it in your heroku homepage account settings
+        heroku_api_key: f87b7572-7750-48c2-81fa-071543922f5e
+        # Email that you use with heroku
+        heroku_email: sdrohan@wit.ie
+        # The appname to use for deploying/updating
+        heroku_app_name: health-tracker-rest-app-stage
+        # A URL to which a healthcheck is performed (checks for 200 request)
+        healthcheck: https://health-tracker-rest-app-stage.herokuapp.com/
