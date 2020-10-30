@@ -17,11 +17,17 @@ import org.wit.helpers.*
 import org.wit.utilities.jsonToArrayWithDate
 import org.wit.utilities.jsonToObject
 import org.wit.utilities.jsonToObjectWithDate
+import org.jetbrains.exposed.sql.Database
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class HealthTrackerAPITest {
 
-    private val db = DbConfig().getDbConnection()
+    //private val db = DbConfig().getDbConnection()
+    val db = Database.connect(
+        "jdbc:postgresql://ec2-34-225-162-157.compute-1.amazonaws.com:5432/d1qu1323l55ule?sslmode=require",
+        driver = "org.postgresql.Driver",
+        user = "hnkxwzewsriise",
+        password = "8eb243fe3522b4377aa928bfdca3b2faeac25cfa51ae148554e924ae963ef1ac")
     private val app = ServerContainer.instance
     private val origin = "http://localhost:" + app.port()
 
